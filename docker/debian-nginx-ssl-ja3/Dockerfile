@@ -5,7 +5,7 @@ LABEL maintainer "andrea.sessa@cleafy.com"
 # Build arguments
 ARG DEBIAN_REPO_HOST=httpredir.debian.org
 ARG GIT_LOCATION=https://github.com/Sessa93/nginx-ssl-ja3.git
-ARG GIT_BRANCH=openresty
+ARG GIT_BRANCH=origin/openresty
 
 # Mirror to my location
 RUN echo "deb http://${DEBIAN_REPO_HOST}/debian sid main" > /etc/apt/sources.list
@@ -86,7 +86,7 @@ RUN cat nginx.ssl.extensions.patch
 RUN patch -p1 < nginx.ssl.extensions.patch
 
 # Configure, make and install
-WORKDIR openresty-1.13.6.2
+WORKDIR /build/openresty-1.13.6.2
 RUN ./configure \
     --with-luajit \
     --with-http_sub_module \
