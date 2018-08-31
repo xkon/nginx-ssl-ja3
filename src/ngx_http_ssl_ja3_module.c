@@ -99,16 +99,43 @@ ngx_http_ssl_ja3_hash(ngx_http_request_t *r,
     v->no_cacheable = 1;
     v->not_found = 0;
 
-#if (NGX_DEBUG)
-    {
-        u_char                         hash_hex[33] = {0};
-        ngx_memcpy(hash_hex, v->data, 32);
+    u_char hash_hex[33] = {0};
+    ngx_memcpy(hash_hex, v->data, 32);
 
-        ngx_log_debug1(NGX_LOG_DEBUG_EVENT,
-                       r->connection->pool->log, 0, "ssl_ja3: http: hash: [%s]\n", hash_hex);
+    ngx_log_debug1(NGX_LOG_DEBUG_EVENT,
+                    r->connection->pool->log, 0, "ssl_ja3: http: hash: [%s]\n", hash_hex);
+
+    return NGX_OK;
+}
+
+static ngx_int_t
+ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uintptr_t data) 
+{
+    ngx_ssl_ja3_t                  ja3;
+    ngx_str_t                      fp = ngx_null_string;
+
+    if (r->connection == NULL) {
+        return NGX_OK;
     }
-#endif
 
+    v->data = ngx_pcalloc(r->pool, 1000);
+
+    if (v->data == NULL) {
+        return NGX_ERROR;
+    }
+
+    if (ngx_ssl_ja3(r->connection, r->pool, &ja3) == NGX_DECLINED) {
+        return NGX_ERROR;
+    }
+
+    ngx_ssl_ja3_fp(r->pool, &ja3, &fp);
+
+    v->len = 1000;
+    v->valid = 1;
+    v->no_cacheable = 1;
+    v->not_found = 0;
+
+    ngx_memcpy(fp, v->data, 1000);
     return NGX_OK;
 }
 
@@ -121,6 +148,11 @@ static ngx_http_variable_t  ngx_http_ssl_ja3_variables_list[] = {
         0, 0, 0
     },
 
+    {   ngx_string("http_ssl_ja3_string"),
+        NULL,
+        ngx_http_ssl_ja3_string,
+        0, 0, 0
+    }
 };
 
 

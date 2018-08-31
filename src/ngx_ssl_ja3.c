@@ -120,12 +120,12 @@ ngx_ssj_ja3_num_digits(int n)
 
 
 static void
-ngx_ssl_ja3_detail_print(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3)
+ngx_ssl_ja3_detail_print(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, ngx_str_t *out)
 {
     /* Version */
     ngx_log_debug1(NGX_LOG_DEBUG_EVENT,
                    pool->log, 0, "ssl_ja3: Version:  %d\n", ja3->version);
-
+    
     /* Ciphers */
     ngx_log_debug1(NGX_LOG_DEBUG_EVENT,
                    pool->log, 0, "ssl_ja3: ciphers: length: %d\n",

@@ -95,7 +95,6 @@ ngx_stream_ssl_ja3_hash(ngx_stream_session_t *s,
     v->no_cacheable = 1;
     v->not_found = 0;
 
-#if (NGX_DEBUG)
     {
         u_char                         hash_hex[33] = {0};
         ngx_memcpy(hash_hex, v->data, 32);
@@ -104,7 +103,6 @@ ngx_stream_ssl_ja3_hash(ngx_stream_session_t *s,
                        s->connection->pool->log,
                        0, "ssl_ja3: stream: hash: [%s]\n", hash_hex);
     }
-#endif
 
     return NGX_OK;
 }

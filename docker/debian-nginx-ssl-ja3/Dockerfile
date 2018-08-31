@@ -99,10 +99,6 @@ RUN ./configure \
     --error-log-path=/var/log/nginx/error.log \
     --lock-path=/var/lock/openresty.lock \
     --pid-path=/var/run/openresty.pid \
-    --http-fastcgi-temp-path=/var/lib/nginx/fastcgi \
-    --http-proxy-temp-path=/var/lib/nginx/proxy \
-    --http-scgi-temp-path=/var/lib/nginx/scgi \
-    --http-uwsgi-temp-path=/var/lib/nginx/uwsgi \
     --add-module=/build/nginx-ssl-ja3 --with-http_ssl_module --with-stream_ssl_module --with-stream  --with-ld-opt="-L/usr/local/lib -Wl,-E"
 RUN make
 RUN make install
