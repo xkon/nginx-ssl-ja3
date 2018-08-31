@@ -119,7 +119,6 @@ ngx_ssj_ja3_num_digits(int n)
 }
 
 
-#if (NGX_DEBUG)
 static void
 ngx_ssl_ja3_detail_print(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3)
 {
@@ -174,7 +173,6 @@ ngx_ssl_ja3_detail_print(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3)
         );
     }
 }
-#endif
 
 
 void
@@ -275,11 +273,9 @@ ngx_ssl_ja3_fp(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, ngx_str_t *out)
     }
 
     out->len = cur;
-#if (NGX_DEBUG)
     ngx_ssl_ja3_detail_print(pool, ja3);
     ngx_log_debug1(NGX_LOG_DEBUG_EVENT,
                    pool->log, 0, "ssl_ja3: fp: [%V]\n", out);
-#endif
 
 }
 
