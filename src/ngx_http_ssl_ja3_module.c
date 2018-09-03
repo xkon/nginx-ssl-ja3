@@ -113,8 +113,8 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
 {
     ngx_ssl_ja3_t                  ja3;
     ngx_str_t                      fp = ngx_null_string;
-    int *version;
-    int *len;
+    int version;
+    int len;
 
     if (r->connection == NULL) {
         return NGX_OK;
@@ -130,13 +130,13 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
         return NGX_ERROR;
     }
 
-    v->len = *len;
+    v->len = len;
     v->valid = 1;
     v->no_cacheable = 1;
     v->not_found = 0;
 
     ngx_ssl_ja3_get_version(r->pool, &ja3, &version, &len);
-    ngx_snprintf(v->data, *len, "%d,", *version);
+    ngx_snprintf(v->data, len, "%d,", version);
 
     return NGX_OK;
 }   
