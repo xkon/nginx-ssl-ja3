@@ -48,5 +48,6 @@ typedef struct ngx_ssl_ja3_s {
 
 int ngx_ssl_ja3(ngx_connection_t *c, ngx_pool_t *pool, ngx_ssl_ja3_t *ja3);
 void ngx_ssl_ja3_fp(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, ngx_str_t *out);
+void ngx_ssl_ja3_get_version(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, int *out, int *len);
 
 #endif //__NGX_SSL_JA3__

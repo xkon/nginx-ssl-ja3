@@ -119,7 +119,7 @@ ngx_ssj_ja3_num_digits(int n)
 }
 
 
-static void ngx_ssl_ja3_get_version(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, int *out, int *len) {
+void ngx_ssl_ja3_get_version(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, int *out, int *len) {
     *out = ja3->version;
     *len = ngx_ssj_ja3_num_digits(ja3->version);
 }
