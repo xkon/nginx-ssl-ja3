@@ -135,7 +135,7 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
     v->no_cacheable = 1;
     v->not_found = 0;
 
-    ngx_memcpy(fp, v->data, 1000);
+    v->data = 0;
     return NGX_OK;
 }
 
