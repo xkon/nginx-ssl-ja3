@@ -136,7 +136,7 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
     v->not_found = 0;
 
     ngx_ssl_ja3_get_version(r->pool, &ja3, &version, &len);
-    ngx_snprintf(out->data, *len, "%d,", *version);
+    ngx_snprintf(v->data, *len, "%d,", *version);
 
     return NGX_OK;
 }   
