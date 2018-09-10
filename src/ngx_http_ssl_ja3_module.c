@@ -120,7 +120,7 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
         return NGX_OK;
     }
 
-    v->data = ngx_pcalloc(r->pool, 1000);
+    v->data = ngx_pcalloc(r->pool, 8);
 
     if (v->data == NULL) {
         return NGX_ERROR;
@@ -136,7 +136,11 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
     v->not_found = 0;
 
     ngx_ssl_ja3_get_version(r->pool, &ja3, &version, &len);
-    ngx_snprintf(v->data, 8, "%d", 12312321);
+    
+    ngx_str_t tmp_str = ngx_string("HELLO CLEAFY!");
+   
+    
+    v->data = tmp_str.data;
 
     return NGX_OK;
 }   
