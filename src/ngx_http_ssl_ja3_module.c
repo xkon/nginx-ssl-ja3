@@ -130,15 +130,14 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
         return NGX_ERROR;
     }
 
-    v->len = 8;
+    ngx_ssl_ja3_get_version(r->pool, &ja3, &version, &len);
+    
+    v->len = len;
     v->valid = 1;
     v->no_cacheable = 1;
     v->not_found = 0;
-
-    ngx_ssl_ja3_get_version(r->pool, &ja3, &version, &len);
     
     ngx_str_t tmp_str = ngx_string("HELLO CLEAFY!");
-   
     
     v->data = tmp_str.data;
 
