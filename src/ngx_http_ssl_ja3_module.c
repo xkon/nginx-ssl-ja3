@@ -147,14 +147,15 @@ ngx_http_ssl_ja3_ciphers(ngx_http_request_t *r, ngx_http_variable_value_t *v, ui
 {
     ngx_ssl_ja3_t                  ja3;
     ngx_str_t                      fp = ngx_null_string;
-    int version;
+    unsigned short ciphers;
     int len;
 
     if (r->connection == NULL) {
         return NGX_OK;
     }
-
-    v->data = ngx_pcalloc(r->pool, 8);
+    
+    ngx_ssl_ja3_get_ciuphers(r->pool, &ja3, &ciphers, &len);
+    v->data = ngx_pcalloc(r->pool, len);
 
     if (v->data == NULL) {
         return NGX_ERROR;
@@ -163,15 +164,13 @@ ngx_http_ssl_ja3_ciphers(ngx_http_request_t *r, ngx_http_variable_value_t *v, ui
     if (ngx_ssl_ja3(r->connection, r->pool, &ja3) == NGX_DECLINED) {
         return NGX_ERROR;
     }
-
-    ngx_ssl_ja3_get_version(r->pool, &ja3, &version, &len);
     
     v->len = len;
     v->valid = 1;
     v->no_cacheable = 1;
     v->not_found = 0;
     
-    ngx_sprintf(v->data, "%d", version);
+    ngx_sprintf(v->data, "%d", ciphers);
 
     return NGX_OK;
 }  
