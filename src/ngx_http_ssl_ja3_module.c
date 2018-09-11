@@ -137,9 +137,7 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
     v->no_cacheable = 1;
     v->not_found = 0;
     
-    ngx_str_t tmp_str = ngx_string("HELLO CLEAFY!");
-    
-    v->data = tmp_str.data;
+    ngx_sprintf(v.data, "%d", version);
 
     return NGX_OK;
 }   
