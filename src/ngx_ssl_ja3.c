@@ -118,21 +118,6 @@ ngx_ssj_ja3_num_digits(int n)
     return c;
 }
 
-
-void ngx_ssl_ja3_get_version(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, int *out, int *len) {
-    *out = ja3->version;
-    *len = ngx_ssj_ja3_num_digits(ja3->version);
-}
-
-void ngx_ssl_ja3_get_ciphers(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, char *out[]) {
-    char *ciphers_str[50]; 
-    
-    for (size_t i = 0; i < ja3->ciphers_sz && i < 50; ++i) {
-        ngx_sprintf(char[i], "%d", ja3->cipher[i]);
-    }
-    out = ciphers_str;
-}
-
 static void
 ngx_ssl_ja3_detail_print(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, ngx_str_t *out)
 {
