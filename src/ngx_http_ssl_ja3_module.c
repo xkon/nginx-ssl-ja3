@@ -118,7 +118,6 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
         return NGX_OK;
     }
     
-    ngx_ssl_ja3_get_ciphers(r->pool, &ja3, ciphers, &cip_size);
     v->data = ngx_pcalloc(r->pool, 1000);
 
     if (v->data == NULL) {
