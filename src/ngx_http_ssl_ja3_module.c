@@ -109,7 +109,7 @@ ngx_http_ssl_ja3_hash(ngx_http_request_t *r,
 }
 
 static ngx_int_t
-ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uintptr_t data) 
+ngx_http_ssl_ja3_version(ngx_http_request_t *r, ngx_http_variable_value_t *v, uintptr_t data) 
 {
     ngx_ssl_ja3_t                  ja3;
     ngx_str_t                      fp = ngx_null_string;
@@ -140,7 +140,41 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
     ngx_sprintf(v->data, "%d", version);
 
     return NGX_OK;
-}   
+}
+
+static ngx_int_t
+ngx_http_ssl_ja3_ciphers(ngx_http_request_t *r, ngx_http_variable_value_t *v, uintptr_t data) 
+{
+    ngx_ssl_ja3_t                  ja3;
+    ngx_str_t                      fp = ngx_null_string;
+    int version;
+    int len;
+
+    if (r->connection == NULL) {
+        return NGX_OK;
+    }
+
+    v->data = ngx_pcalloc(r->pool, 8);
+
+    if (v->data == NULL) {
+        return NGX_ERROR;
+    }
+
+    if (ngx_ssl_ja3(r->connection, r->pool, &ja3) == NGX_DECLINED) {
+        return NGX_ERROR;
+    }
+
+    ngx_ssl_ja3_get_version(r->pool, &ja3, &version, &len);
+    
+    v->len = len;
+    v->valid = 1;
+    v->no_cacheable = 1;
+    v->not_found = 0;
+    
+    ngx_sprintf(v->data, "%d", version);
+
+    return NGX_OK;
+}  
 
 
 static ngx_http_variable_t  ngx_http_ssl_ja3_variables_list[] = {
@@ -151,9 +185,15 @@ static ngx_http_variable_t  ngx_http_ssl_ja3_variables_list[] = {
         0, 0, 0
     },
 
-    {   ngx_string("http_ssl_ja3_string"),
+    {   ngx_string("http_ssl_ja3_version"),
         NULL,
-        ngx_http_ssl_ja3_string,
+        ngx_http_ssl_ja3_version,
+        0, 0, 0
+    },
+    
+    {   ngx_string("http_ssl_ja3_ciphers"),
+        NULL,
+        ngx_http_ssl_ja3_ciphers,
         0, 0, 0
     }
 };
