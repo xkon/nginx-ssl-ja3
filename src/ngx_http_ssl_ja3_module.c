@@ -135,7 +135,7 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
 
     ngx_ssl_ja3_fp(r->pool, &ja3, &fp);
 
-    v->data = fp->data;
+    v->data = fp.data;
 
     return NGX_OK;
 }  
