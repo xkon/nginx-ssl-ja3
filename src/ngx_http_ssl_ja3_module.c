@@ -118,7 +118,7 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
         return NGX_OK;
     }
     
-    v->data = ngx_pcalloc(r->pool, 1000);
+    v->data = ngx_pcalloc(r->pool, 100);
 
     if (v->data == NULL) {
         return NGX_ERROR;
@@ -131,7 +131,7 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
     v->valid = 1;
     v->no_cacheable = 1;
     v->not_found = 0;
-    v->len = 1000;
+    v->len = 100;
 
     ngx_ssl_ja3_fp(r->pool, &ja3, &fp);
 
