@@ -317,7 +317,7 @@ ngx_ssl_ja3(ngx_connection_t *c, ngx_pool_t *pool, ngx_ssl_ja3_t *ja3) {
     /* Cipher suites */
     ja3->ciphers = NULL;
     ja3->ciphers_sz = SSL_get0_raw_cipherlist(ssl, &ciphers_out);
-    //ja3->ciphers_sz /= 2;
+    ja3->ciphers_sz /= 2;
 
     if (ja3->ciphers_sz && ciphers_out) {
         len = ja3->ciphers_sz * sizeof(unsigned short);
