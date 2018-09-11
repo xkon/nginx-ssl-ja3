@@ -200,14 +200,14 @@ ngx_ssl_ja3_fp(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, ngx_str_t *out)
         }
         len += (ja3->extensions_sz - 1);                   /* '-' separators */
     }
-    // ++len;                                                  /* ',' separator */
+    ++len;                                                  /* ',' separator */
 
-    // if (ja3->curves_sz) {
-    //     for (size_t i = 0; i < ja3->curves_sz; ++i) {
-    //         len += ngx_ssj_ja3_num_digits(ja3->curves[i]); /* curves [i] */
-    //     }
-    //     len += (ja3->curves_sz - 1);                       /* '-' separators */
-    // }
+    if (ja3->curves_sz) {
+        for (size_t i = 0; i < ja3->curves_sz; ++i) {
+            len += ngx_ssj_ja3_num_digits(ja3->curves[i]); /* curves [i] */
+        }
+        len += (ja3->curves_sz - 1);                       /* '-' separators */
+    }
     // ++len;                                                  /* ',' separator */
 
     // if (ja3->point_formats_sz) {
@@ -246,18 +246,18 @@ ngx_ssl_ja3_fp(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, ngx_str_t *out)
             cur += len;
         }
     }
-    // ngx_snprintf(out->data + (cur++), 1, ",");
+    ngx_snprintf(out->data + (cur++), 1, ",");
 
-    // if (ja3->curves_sz) {
-    //     for (size_t i = 0; i < ja3->curves_sz; i++) {
-    //         if (i > 0) {
-    //             ngx_snprintf(out->data + (cur++), 1, "-");
-    //         }
-    //         len = ngx_ssj_ja3_num_digits(ja3->curves[i]);
-    //         ngx_snprintf(out->data + cur, len, "%d", ja3->curves[i]);
-    //         cur += len;
-    //     }
-    // }
+    if (ja3->curves_sz) {
+        for (size_t i = 0; i < ja3->curves_sz; i++) {
+            if (i > 0) {
+                ngx_snprintf(out->data + (cur++), 1, "-");
+            }
+            len = ngx_ssj_ja3_num_digits(ja3->curves[i]);
+            ngx_snprintf(out->data + cur, len, "%d", ja3->curves[i]);
+            cur += len;
+        }
+    }
     // ngx_snprintf(out->data + (cur++), 1, ",");
 
     // if (ja3->point_formats_sz) {
