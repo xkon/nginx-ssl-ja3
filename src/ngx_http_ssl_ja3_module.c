@@ -34,6 +34,7 @@
 static ngx_int_t ngx_http_ssl_ja3_init(ngx_conf_t *cf);
 
 /* http_json_log config preparation */
+// 注入hook，
 static ngx_http_module_t ngx_http_ssl_ja3_module_ctx = {
     NULL,                                  /* preconfiguration */
     ngx_http_ssl_ja3_init,                 /* postconfiguration */
@@ -62,7 +63,7 @@ ngx_module_t ngx_http_ssl_ja3_module = {
     NGX_MODULE_V1_PADDING
 };
 
-
+//变量实现函数 ngx_http_ssl_ja3_hash
 static ngx_int_t
 ngx_http_ssl_ja3_hash(ngx_http_request_t *r,
         ngx_http_variable_value_t *v, uintptr_t data)
@@ -109,7 +110,7 @@ ngx_http_ssl_ja3_hash(ngx_http_request_t *r,
 }
 
 static ngx_int_t
-ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uintptr_t data) 
+ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uintptr_t data)
 {
     ngx_ssl_ja3_t                  ja3;
     ngx_str_t                      fp = ngx_null_string;
@@ -123,13 +124,13 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
     }
 
     ngx_ssl_ja3_fp(r->pool, &ja3, &fp);
-    
+
     v->data = ngx_pcalloc(r->pool, ngx_strlen(fp.data));
 
     if (v->data == NULL) {
         return NGX_ERROR;
     }
-    
+
     v->valid = 1;
     v->no_cacheable = 1;
     v->not_found = 0;
@@ -138,9 +139,9 @@ ngx_http_ssl_ja3_string(ngx_http_request_t *r, ngx_http_variable_value_t *v, uin
     v->data = fp.data;
 
     return NGX_OK;
-}  
+}
 
-
+// 定义了 两个变量 ngx.var.http_ssl_ja3_hash，ngx.var.http_ssl_ja3_string
 static ngx_http_variable_t  ngx_http_ssl_ja3_variables_list[] = {
 
     {   ngx_string("http_ssl_ja3_hash"),
