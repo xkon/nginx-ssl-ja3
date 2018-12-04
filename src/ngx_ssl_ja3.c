@@ -326,7 +326,14 @@ ngx_ssl_ja3(ngx_connection_t *c, ngx_pool_t *pool, ngx_ssl_ja3_t *ja3) {
             return NGX_DECLINED;
         }
 
-        ngx_memcpy(ja3->ciphers, ciphers_out, len);
+        // ngx_memcpy(ja3->ciphers, ciphers_out, len);
+        size_t j=0;
+        for (size_t i=0; i<ja3->ciphers_sz;++i){
+            if (! ngx_ssl_ja3_is_ext_greased(ciphers_out[i])) {
+                ja3->ciphers[j++] = ciphers_out[i];
+            }
+        }
+        ja3->ciphers_sz = j;
 #if NGX_HAVE_LITTLE_ENDIAN
         for (size_t i = 0; i < ja3->ciphers_sz; ++i) {
             ja3->ciphers[i] = ((ja3->ciphers[i])&0x00ff)<<8 | ((ja3->ciphers[i])&0xff00)>>8;
