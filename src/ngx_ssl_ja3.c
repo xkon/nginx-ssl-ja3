@@ -272,6 +272,8 @@ ngx_ssl_ja3_fp(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, ngx_str_t *out)
     }
 
     out->len = cur;
+    // the end of the string
+    ngx_memzero(out->data+cur, 1);
     ngx_ssl_ja3_detail_print(pool, ja3, 0);
     ngx_log_debug1(NGX_LOG_DEBUG_EVENT,
                    pool->log, 0, "ssl_ja3: fp: [%V]\n", out);
@@ -343,6 +345,7 @@ ngx_ssl_ja3(ngx_connection_t *c, ngx_pool_t *pool, ngx_ssl_ja3_t *ja3) {
     }
 
     /* Extensions */
+    // 存在一些问题，不会得到channel_id 和 Unknown 的type
     ja3->extensions = NULL;
     ja3->extensions_sz = 0;
     if (c->ssl->client_extensions_size && c->ssl->client_extensions) {
@@ -374,9 +377,14 @@ ngx_ssl_ja3(ngx_connection_t *c, ngx_pool_t *pool, ngx_ssl_ja3_t *ja3) {
         if (ja3->curves == NULL) {
             return NGX_DECLINED;
         }
+        // GREASE fix need here
+        size_t j=0;
         for (size_t i = 0; i < ja3->curves_sz; i++) {
-            ja3->curves[i] = ngx_ssl_ja3_nid_to_cid(curves_out[i]);
+            if (! ngx_ssl_ja3_is_ext_greased(curves_out[i])) {
+                ja3->curves[j++] = ngx_ssl_ja3_nid_to_cid(curves_out[i]);
+            }
         }
+        ja3->curves_sz = j;
 
         if (curves_out) {
             OPENSSL_free(curves_out);
