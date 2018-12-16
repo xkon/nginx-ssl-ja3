@@ -217,7 +217,7 @@ ngx_ssl_ja3_fp(ngx_pool_t *pool, ngx_ssl_ja3_t *ja3, ngx_str_t *out)
         len += (ja3->point_formats_sz - 1);                 /* '-' separators */
     }
 
-    out->data = ngx_pnalloc(pool, len);
+    out->data = ngx_pnalloc(pool, len+1);
     out->len = len;
 
     len = ngx_ssj_ja3_num_digits(ja3->version) + 1;
